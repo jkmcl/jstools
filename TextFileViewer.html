@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Text File Viewer</title>
+<style>
+body { margin-left: 5%; margin-right: 5%; }
+h3 { font: bold larger Helvetica, Arial, sans-serif; }
+body p { font: medium Helvetica, Arial, sans-serif; }
+#files { background-color: #99CCFF; }
+</style>
+</head>
+<body>
+
+<h3>Text File Viewer</h3>
+
+<p>Select a file or drag and drop it over the button and the colored area: <input type="file" id="files" name="files[]" />
+
+<p><textarea id="output" readonly cols="100" rows="40"></textarea>
+
+<script>
+// Check for the various File API support.
+if (window.File && window.FileReader && window.FileList && window.Blob) {
+	// Great success! All the File APIs are supported.
+}
+else {
+	alert('The File APIs are not fully supported in this browser.');
+}
+
+function handleFileSelect(evt) {
+	var files = evt.target.files; // files is a FileList of File objects
+	var f = files[0];
+	var reader = new FileReader();
+	reader.onload = function(e) {
+		var contents = reader.result;
+		document.getElementById('output').value = contents;
+	}
+	reader.readAsText(f);
+
+}
+
+document.getElementById('files').addEventListener('change', handleFileSelect, false);
+</script>
+
+</body>
+</html>
