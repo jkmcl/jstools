@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<title>Clocks</title>
+<style type="text/css">
+	* { font: medium Arial, Helvetica, sans-serif; }
+	body { margin: 2.5% 5%; }
+	td { padding: 0.25em 0.5em; }
+	.city { font-weight: bold; color: #000099; }
+	.tz { font-size: smaller; color: #999999; }
+	.dow { font-size: smaller; color: #999999; }
+	.time { font-weight: bold; }
+</style>
+<script>
+
+function padZero(i) {
+	return (i < 10 ? "0" : "") + i;
+}
+
+function formatTime(date) {
+	var h = padZero(date.getHours());
+	var m = padZero(date.getMinutes());
+	var s = padZero(date.getSeconds());
+	return h + ":" + m + ":" + s;
+}
+
+function formatDayOfWeek(i) {
+	var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+	return "(" + days[i] + ")";
+}
+
+function updateTime() {
+	var date = new Date();
+	var utc = date.getTime() + date.getTimezoneOffset() * 60000;
+	var jst = new Date(utc + 9 * 3600000);
+	var hkt = new Date(utc + 8 * 3600000);
+
+	var jstDay = "";
+	var hktDay = "";
+	if (jst.getDay() != hkt.getDay()) {
+		jstDay = formatDayOfWeek(jst.getDay());
+		hktDay = formatDayOfWeek(hkt.getDay());
+	}
+
+	document.getElementById("jst").innerHTML = formatTime(jst);
+	document.getElementById("jstDay").innerHTML = jstDay;
+	document.getElementById("hkt").innerHTML = formatTime(hkt);
+	document.getElementById("hktDay").innerHTML = hktDay;
+}
+
+</script>
+</head>
+
+<body onload="updateTime(); setInterval(updateTime, 1000)">
+
+<table>
+<tr>
+	<td><span class="city">Tokyo</span> <span class="tz">(JST)</span></td>
+	<td><span class="time" id="jst"></span> <span id="jstDay" class="dow"></span></td>
+</tr>
+<tr>
+	<td><span class="city">Hong Kong</span> <span class="tz">(HKT)</span></td>
+	<td><span class="time" id="hkt"></span> <span id="hktDay" class="dow"></span></td>
+</tr>
+</table>
+
+</body>
+</html>
